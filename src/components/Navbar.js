@@ -5,18 +5,29 @@ import styled from 'styled-components';
 const Navbar = () => {
   const { isLoading, isAuthenticated, error, user, loginWithRedirect, logout } =
     useAuth0();
-  console.log({ isAuthenticated, user, isLoading });
+
+  const isUser = isAuthenticated && user;
+  // console.log({ isAuthenticated, user, isLoading });
 
   return (
     <Wrapper>
-      <button onClick={loginWithRedirect}>login</button>
-      <button
-        onClick={() => {
-          logout({ returnTo: window.location.origin });
-        }}
-      >
-        logout
-      </button>
+      {isUser && user.picture && <img src={user.picture} alt={user.name} />}
+      {isUser && user.name && (
+        <h4 className='user'>
+          Welcome, <strong>{user.name.toUpperCase()}</strong>
+        </h4>
+      )}
+      {isUser ? (
+        <button
+          onClick={() => {
+            logout({ returnTo: window.location.origin });
+          }}
+        >
+          logout
+        </button>
+      ) : (
+        <button onClick={loginWithRedirect}>login</button>
+      )}
     </Wrapper>
   );
 };
